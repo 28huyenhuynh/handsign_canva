@@ -393,7 +393,7 @@ def main():
     print(f"  {'TOTAL':<32}  {total_mean:6.2f} ms")
     print(f"  {'Est. FPS':<32}  {1000/total_mean:.1f} fps")
     print("=" * 58)
-    print(f"\nSession log saved → {LOG_PATH}")
+    print(f"\nSession log saved -> {LOG_PATH}")
 
     cap.release()
     cv2.destroyAllWindows()
