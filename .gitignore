@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.venv312/
+data/landmarks.csv
+model/sign_model.pkl
+model/label_map.txt
+model/confusion_matrix.png
+session_log.csv
+.DS_Store
