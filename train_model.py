@@ -80,6 +80,18 @@ model = MLPClassifier(
 )
 model.fit(X_train, y_train)
 
+# -- 5a. Training Loss Curve ---------------------------------------------------
+plt.figure(figsize=(8, 4))
+plt.plot(model.loss_curve_)
+plt.xlabel("Iteration")
+plt.ylabel("Training Loss")
+plt.title("MLP Training Convergence")
+plt.tight_layout()
+CURVE_PATH = os.path.join(MODEL_DIR, "training_curve.png")
+plt.savefig(CURVE_PATH, dpi=150)
+plt.close()
+print(f"  Training curve saved -> {CURVE_PATH}")
+
 # -- 5. Evaluate ---------------------------------------------------------------
 print("\nEvaluating on test set ...")
 acc = model.score(X_test, y_test)

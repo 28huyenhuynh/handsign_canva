@@ -180,7 +180,7 @@ def main():
     pyautogui.FAILSAFE = False
 
     print("\nHand Sign Canva Controller - running.")
-    print("Press  Q on keyboard  or sign [Q] to quit.\n")
+    print("Press  ESC  to quit.\n")
 
     while True:
         # ── Stage 1: Capture & Preprocess ────────────────────────────────────
@@ -310,7 +310,7 @@ def main():
         stage_times[6].append((time.perf_counter() - t6) * 1000)
 
         cv2.imshow("Hand Sign Canva Controller", frame)
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        if cv2.waitKey(1) & 0xFF == 27:  # ESC to quit
             break
 
     # ── Final performance report ───────────────────────────────────────────────
