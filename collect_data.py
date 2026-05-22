@@ -3,7 +3,7 @@ collect_data.py
 ===============
 Run this ONCE before training to collect your own hand sign samples.
 
-For each sign (B, C, D, M, Q, LEFT, RIGHT) the script will:
+For each sign (B, C, D, O, Q, U, M, LEFT, RIGHT) the script will:
   1. Show a countdown so you can get your hand ready
   2. Record 200 frames of landmark data while you hold the sign
   3. Save everything to  data/landmarks.csv
@@ -17,7 +17,6 @@ Requirements:
 
 import cv2
 import mediapipe as mp
-import numpy as np
 import csv
 import os
 import time
@@ -54,16 +53,15 @@ def extract_landmarks(hand_landmarks):
     """
     lm = hand_landmarks.landmark
 
-    # Wrist position as reference origin
     wrist_x = lm[0].x
     wrist_y = lm[0].y
     wrist_z = lm[0].z
 
     features = []
     for point in lm:
-        features.append(point.x - wrist_x)   # relative x
-        features.append(point.y - wrist_y)   # relative y
-        features.append(point.z - wrist_z)   # relative z (depth estimate)
+        features.append(point.x - wrist_x)
+        features.append(point.y - wrist_y)
+        features.append(point.z - wrist_z)
 
     return features   # length = 21 * 3 = 63
 
@@ -77,7 +75,7 @@ def collect_sign(sign_label, writer):
         ret, frame = cap.read()
         if not ret:
             break
-        frame = cv2.flip(frame, 1)   # mirror for natural feel
+        frame = cv2.flip(frame, 1)
 
         remaining = COUNTDOWN_SECONDS - int(time.time() - start_time)
         cv2.putText(frame,
@@ -105,10 +103,8 @@ def collect_sign(sign_label, writer):
         if results.multi_hand_landmarks:
             hand_lm = results.multi_hand_landmarks[0]
 
-            # Draw landmarks on screen
             mp_draw.draw_landmarks(frame, hand_lm, mp_hands.HAND_CONNECTIONS)
 
-            # Extract and save
             features = extract_landmarks(hand_lm)
             writer.writerow([sign_label] + features)
             collected += 1
@@ -123,13 +119,13 @@ def collect_sign(sign_label, writer):
                     (0, 255, 100), 2)
         cv2.imshow("Data Collection", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            return False   # user quit early
+            return False
 
     return True
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-print(f"\nData Collection — Hand Sign Recognition")
+print(f"\nData Collection - Hand Sign Recognition")
 print(f"Signs to collect: {SIGNS}")
 print(f"Samples per sign: {SAMPLES_PER_SIGN}")
 print(f"Output: {CSV_PATH}\n")
@@ -138,7 +134,6 @@ print("Press Q at any time to stop early.\n")
 with open(CSV_PATH, "w", newline="") as f:
     writer = csv.writer(f)
 
-    # Header row: label + 63 feature columns
     header = ["label"] + [f"f{i}" for i in range(63)]
     writer.writerow(header)
 
